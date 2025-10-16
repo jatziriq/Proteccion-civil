@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🚨 Emergencias - Protección Civil</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' }
+  </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
+
+  <!-- Navbar -->
+  <header class="bg-red-700 text-white shadow-md dark:bg-red-900 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+      <div class="flex items-center space-x-3">
+        <img src="ProtecCivil.jpg" alt="Logo" class="h-12 w-12 rounded-full border-2 border-white">
+        <h1 class="text-xl font-bold">🚨 Protección Civil - EMERGENCIAS</h1>
+      </div>
+      <a href="index.html" class="hover:text-yellow-300">← Volver al Inicio</a>
+    </div>
+  </header>
+
+  <!-- Alerta Superior -->
+  <div class="bg-red-600 dark:bg-red-800 text-white py-4 text-center animate-pulse">
+    <p class="text-2xl font-bold">⚠️ LÍNEA DE EMERGENCIAS: 312-XXX-XXXX (24/7)</p>
+  </div>
+
+  <!-- Contenido -->
+  <section class="max-w-5xl mx-auto py-12 px-6">
+    <div class="bg-gradient-to-br from-red-50 to-red-100 dark:from-red-950 dark:to-red-900 border-4 border-red-600 dark:border-red-700 rounded-2xl p-8 shadow-2xl">
+      
+      <!-- Header -->
+      <div class="text-center mb-8">
+        <div class="text-7xl mb-4">🚨</div>
+        <h1 class="text-4xl font-bold text-red-800 dark:text-red-300 mb-3">Reporte de Emergencia</h1>
+        <p class="text-xl text-red-700 dark:text-red-400 font-semibold">
+          Si tu vida o la de alguien está en peligro, llama INMEDIATAMENTE al <span class="text-2xl">312-XXX-XXXX</span>
+        </p>
+        <p class="text-gray-700 dark:text-gray-300 mt-3">
+          Este formulario es para reportes que NO sean de vida o muerte. Un equipo será despachado a tu ubicación.
+        </p>
+      </div>
+
+      <!-- Formulario -->
+      <form id="formEmergencia" class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-xl space-y-6">
+        
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <label class="block font-bold mb-2 text-gray-800 dark:text-white">Nombre Completo *</label>
+            <input type="text" id="nombre" required class="w-full border-2 border-red-300 dark:border-red-700 rounded-lg p-3 dark:bg-gray-700 dark:text-white focus:border-red-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block font-bold mb-2 text-gray-800 dark:text-white">Teléfono de Contacto *</label>
+            <input type="tel" id="telefono" required class="w-full border-2 border-red-300 dark:border-red-700 rounded-lg p-3 dark:bg-gray-700 dark:text-white focus:border-red-500 focus:outline-none" placeholder="312-XXX-XXXX">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold mb-2 text-gray-800 dark:text-white">Email (opcional)</label>
+          <input type="email" id="email" class="w-full border-2 border-red-300 dark:border-red-700 rounded-lg p-3 dark:bg-gray-700 dark:text-white focus:border-red-500 focus:outline-none">
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <label class="block font-bold mb-2 text-gray-800 dark:text-white">Tipo de Emergencia *</label>
+            <select id="tipo" required class="w-full border-2 border-red-300 dark:border-red-700 rounded-lg p-3 dark:bg-gray-700 dark:text-white focus:border-red-500 focus:outline-none">
+              <option value="">-- Seleccione --</option>
+              <option value="medica">🏥 Médica</option>
+              <option value="incendio">🔥 Incendio</option>
+              <option value="evacuacion">🚨 Evacuación</option>
+              <option value="accidente">🚑 Accidente</option>
+              <option value="estructural">🏢 Daño Estructural</option>
+              <option value="quimica">⚗️ Derrame Químico</option>
+              <option value="otra">⚠️ Otra</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-bold mb-2 text-gray-800 dark:text-white">Nivel de Urgencia *</label>
+            <select id="urgencia" required class="w-full border-2 border-red-300 dark:border-red-700 rounded-lg p-3 dark:bg-gray-700 dark:text-white focus:border-red-500 focus:outline-none">
+              <option value="baja">🟢 Baja</option>
+              <option value="media" selected>🟡 Media</option>
+              <option value="alta">🟠 Alta</option>
+              <option value="critica">🔴 CRÍTICA</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <div>
+            <label class="block font-bold mb-2 text-gray-800 dark:text-white">Edificio</label>
+            <input type="text" id="edificio" class="w-full border-2 border-red-300 dark:border-red-700 rounded-lg p-3 dark:bg-gray-700 dark:text-white focus:border-red-500 focus:outline-none" placeholder="Ej: Edificio A">
+          </div>
+          <div>
+            <label class="block font-bold mb-2 text-gray-800 dark:text-white">Piso</label>
+            <input type="text" id="piso" class="w-full border-2 border-red-300 dark:border-red-700 rounded-lg p-3 dark:bg-gray-700 dark:text-white focus:border-red-500 focus:outline-none" placeholder="Ej: 2do piso">
+          </div>
+          <div>
+            <label class="block font-bold mb-2 text-gray-800 dark:text-white">Personas Afectadas</label>
+            <input type="number" id="afectados" value="1" min="1" class="w-full border-2 border-red-300 dark:border-red-700 rounded-lg p-3 dark:bg-gray-700 dark:text-white focus:border-red-500 focus:outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-bold mb-2 text-gray-800 dark:text-white">Ubicación Detallada *</label>
+          <input type="text" id="ubicacion" required class="w-full border-2 border-red-300 dark:border-red-700 rounded-lg p-3 dark:bg-gray-700 dark:text-white focus:border-red-500 focus:outline-none" placeholder="Describe exactamente dónde estás">
+        </div>
+
+        <div>
+          <label class="block font-bold mb-2 text-gray-800 dark:text-white">Descripción de la Emergencia *</label>
+          <textarea id="descripcion" required rows="5" class="w-full border-2 border-red-300 dark:border-red-700 rounded-lg p-3 dark:bg-gray-700 dark:text-white focus:border-red-500 focus:outline-none" placeholder="Describe qué está sucediendo con el mayor detalle posible"></textarea>
+        </div>
+
+        <div class="bg-yellow-50 dark:bg-yellow-900/20 border-2 border-yellow-400 dark:border-yellow-700 rounded-lg p-4">
+          <p class="text-sm font-semibold text-yellow-800 dark:text-yellow-300">
+            ⚠️ <strong>IMPORTANTE:</strong> Asegúrate de proporcionar tu ubicación exacta. Un equipo será despachado inmediatamente.
+          </p>
+        </div>
+
+        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold text-xl py-5 rounded-xl shadow-2xl transition transform hover:scale-105 flex items-center justify-center gap-3">
+          <span class="text-3xl">🚨</span>
+          <span>ENVIAR REPORTE DE EMERGENCIA</span>
+        </button>
+      </form>
+
+    </div>
+
+    <!-- Información Adicional -->
+    <div class="grid md:grid-cols-3 gap-6 mt-8">
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 text-center">
+        <div class="text-4xl mb-3">📞</div>
+        <h3 class="font-bold text-lg mb-2">Línea Directa</h3>
+        <p class="text-gray-600 dark:text-gray-300">312-XXX-XXXX</p>
+      </div>
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 text-center">
+        <div class="text-4xl mb-3">⏱️</div>
+        <h3 class="font-bold text-lg mb-2">Tiempo de Respuesta</h3>
+        <p class="text-gray-600 dark:text-gray-300">5-10 minutos</p>
+      </div>
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 text-center">
+        <div class="text-4xl mb-3">🚑</div>
+        <h3 class="font-bold text-lg mb-2">Brigadas Activas</h3>
+        <p class="text-gray-600 dark:text-gray-300">5 equipos disponibles</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-red-700 dark:bg-red-900 text-white text-center py-6">
+    <p>&copy; 2025 Protección Civil - Universidad de Colima</p>
+  </footer>
+
+  <script>
+    const API_URL = 'http://localhost:3000/api/';
+
+    document.getElementById('formEmergencia').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      if (!confirm('¿Estás seguro de reportar esta emergencia? Un equipo será despachado a tu ubicación.')) {
+        return;
+      }
+
+      const datos = {
+        nombre_solicitante: document.getElementById('nombre').value,
+        telefono: document.getElementById('telefono').value,
+        email: document.getElementById('email').value,
+        tipo_emergencia: document.getElementById('tipo').value,
+        nivel_urgencia: document.getElementById('urgencia').value,
+        edificio: document.getElementById('edificio').value,
+        piso: document.getElementById('piso').value,
+        numero_afectados: document.getElementById('afectados').value,
+        ubicacion_detallada: document.getElementById('ubicacion').value,
+        descripcion: document.getElementById('descripcion').value
+      };
+
+      try {
+        const res = await fetch(API_URL + 'emergencias', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(datos)
+        });
+        
+        const result = await res.json();
+        
+        if (result.success) {
+          alert(`🚨 EMERGENCIA REPORTADA\n\n✅ Folio: ${result.folio}\n📍 Tipo: ${result.tipo}\n🔴 Nivel: ${result.nivel}\n\n${result.message}\n\n⚠️ MANTÉN TU TELÉFONO DISPONIBLE`);
+          window.location.href = 'index.html';
+        } else {
+          alert('❌ ' + result.message + '\n\nSi es urgente, llama al 312-XXX-XXXX');
+        }
+      } catch (error) {
+        alert('❌ Error al reportar emergencia.\n\n⚠️ LLAMA INMEDIATAMENTE AL 312-XXX-XXXX');
+      }
+    });
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solicitud de Ingreso - Protección Civil</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' }
+  </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 min-h-screen flex flex-col">
+
+  <!-- Navbar -->
+  <header class="bg-green-700 text-white shadow-md dark:bg-green-900">
+    <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+      <div class="flex items-center space-x-3">
+        <img src="ProtecCivil.jpg" alt="Logo" class="h-12 w-12 rounded-full border-2 border-white">
+        <h1 class="text-xl font-bold">Protección Civil - UdeC</h1>
+      </div>
+      <a href="brigadas.html" class="hover:text-yellow-300 transition">← Volver a Brigadas</a>
+    </div>
+  </header>
+
+  <!-- Formulario -->
+  <main class="flex-grow flex justify-center items-center py-10 px-4">
+    <section class="w-full max-w-3xl bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
+      <h2 class="text-3xl font-bold text-green-700 dark:text-green-400 mb-2 text-center">Solicitud de Ingreso</h2>
+      <p id="nombreBrigada" class="text-lg text-gray-600 dark:text-gray-300 mb-8 text-center"></p>
+
+      <form id="formSolicitud" class="space-y-6">
+        <input type="hidden" id="brigadaId">
+
+        <!-- Datos personales -->
+        <div class="grid md:grid-cols-2 gap-6">
+          <div>
+            <label class="block font-semibold mb-2 text-gray-700 dark:text-gray-200">Nombre Completo *</label>
+            <input type="text" id="nombre" required placeholder="Ej. Juan Pérez"
+              class="w-full border-2 rounded-lg p-3 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:border-green-500 focus:outline-none">
+          </div>
+
+          <div>
+            <label class="block font-semibold mb-2 text-gray-700 dark:text-gray-200">Correo Electrónico *</label>
+            <input type="email" id="email" required placeholder="ejemplo@ucol.mx"
+              class="w-full border-2 rounded-lg p-3 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:border-green-500 focus:outline-none">
+          </div>
+        </div>
+
+        <!-- Contacto y escolaridad -->
+        <div class="grid md:grid-cols-3 gap-6">
+          <div>
+            <label class="block font-semibold mb-2 text-gray-700 dark:text-gray-200">Teléfono *</label>
+            <input type="tel" id="telefono" required placeholder="3121234567"
+              class="w-full border-2 rounded-lg p-3 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:border-green-500 focus:outline-none">
+          </div>
+
+          <div>
+            <label class="block font-semibold mb-2 text-gray-700 dark:text-gray-200">No. de Cuenta</label>
+            <input type="text" id="cuenta" placeholder="202012345"
+              class="w-full border-2 rounded-lg p-3 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:border-green-500 focus:outline-none">
+          </div>
+
+          <div>
+            <label class="block font-semibold mb-2 text-gray-700 dark:text-gray-200">Semestre</label>
+            <input type="number" id="semestre" min="1" max="12" placeholder="6"
+              class="w-full border-2 rounded-lg p-3 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:border-green-500 focus:outline-none">
+          </div>
+        </div>
+
+        <!-- Carrera -->
+        <div>
+          <label class="block font-semibold mb-2 text-gray-700 dark:text-gray-200">Carrera *</label>
+          <input type="text" id="carrera" required placeholder="Ej. Ingeniería Civil"
+            class="w-full border-2 rounded-lg p-3 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:border-green-500 focus:outline-none">
+        </div>
+
+        <!-- Experiencia -->
+        <div>
+          <label class="block font-semibold mb-2 text-gray-700 dark:text-gray-200">Experiencia Previa</label>
+          <textarea id="experiencia" rows="3" placeholder="Describe brevemente tu experiencia relacionada"
+            class="w-full border-2 rounded-lg p-3 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:border-green-500 focus:outline-none"></textarea>
+        </div>
+
+        <!-- Motivación -->
+        <div>
+          <label class="block font-semibold mb-2 text-gray-700 dark:text-gray-200">Motivación *</label>
+          <textarea id="motivacion" rows="4" required placeholder="¿Por qué quieres unirte a esta brigada?"
+            class="w-full border-2 rounded-lg p-3 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:border-green-500 focus:outline-none"></textarea>
+        </div>
+
+        <!-- Botones -->
+        <div class="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+          <button type="submit"
+            class="bg-green-700 hover:bg-green-800 text-white font-bold py-3 px-6 rounded-lg transition w-full sm:w-auto">
+            Enviar Solicitud
+          </button>
+          <a href="brigadas.html"
+            class="border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-semibold py-3 px-6 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition w-full sm:w-auto text-center">
+            Cancelar
+          </a>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script>
+    const API_URL = 'http://localhost:3000/api/';
+    const params = new URLSearchParams(window.location.search);
+    const brigadaId = params.get('id');
+    const nombreBrigada = params.get('nombre');
+
+    document.getElementById('brigadaId').value = brigadaId;
+    document.getElementById('nombreBrigada').textContent = nombreBrigada;
+
+    document.getElementById('formSolicitud').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const datos = {
+        brigada_id: document.getElementById('brigadaId').value,
+        nombre_completo: document.getElementById('nombre').value,
+        email: document.getElementById('email').value,
+        telefono: document.getElementById('telefono').value,
+        n_cuenta: document.getElementById('cuenta').value,
+        carrera: document.getElementById('carrera').value,
+        semestre: document.getElementById('semestre').value,
+        experiencia_previa: document.getElementById('experiencia').value,
+        motivacion: document.getElementById('motivacion').value
+      };
+
+      try {
+        const res = await fetch(API_URL + 'brigadas', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(datos)
+        });
+
+        const result = await res.json();
+
+        if (result.success) {
+          alert('✅ ' + result.message);
+          window.location.href = 'brigadas.html';
+        } else {
+          alert('❌ ' + result.message);
+        }
+      } catch (error) {
+        alert('❌ Error al enviar la solicitud. Por favor intenta de nuevo.');
+      }
+    });
+  </script>
+
+</body>
+</html>

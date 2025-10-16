@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brigadas - Protección Civil</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' }
+  </script>
+  <style>
+    body { transition: background-color 0.3s ease, color 0.3s ease; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200">
+
+  <!-- Navbar -->
+  <header class="bg-green-700 text-white shadow-md dark:bg-green-900 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+      <div class="flex items-center space-x-3">
+        <img src="ProtecCivil.jpg" alt="Logo" class="h-12 w-12 rounded-full border-2 border-white">
+        <h1 class="text-xl font-bold">Protección Civil - UdeC</h1>
+      </div>
+      <nav>
+        <ul class="flex space-x-6">
+          <li><a href="index.html" class="hover:text-yellow-300">Inicio</a></li>
+          <li><a href="novedades.html" class="hover:text-yellow-300">Novedades</a></li>
+          <li><a href="brigadas.html" class="text-yellow-300 font-bold">Brigadas</a></li>
+          <li><a href="cursos.html" class="hover:text-yellow-300">Cursos</a></li>
+          <li><a href="documentos.html" class="hover:text-yellow-300">Documentos</a></li>
+          <li><a href="contacto.html" class="hover:text-yellow-300">Contacto</a></li>
+        </ul>
+      </nav>
+      <button id="darkModeToggle" class="ml-4 px-3 py-2 bg-white text-green-700 rounded shadow">
+        🌙
+      </button>
+    </div>
+  </header>
+
+  <!-- Título -->
+  <section class="bg-green-600 dark:bg-green-800 text-white py-12">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+      <h1 class="text-4xl font-bold">Brigadas Universitarias</h1>
+      <p class="text-lg mt-2">Únete y marca la diferencia en tu comunidad</p>
+    </div>
+  </section>
+
+  <!-- Lista de Brigadas -->
+  <section class="max-w-7xl mx-auto py-16 px-6">
+    <div id="listaBrigadas" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Se carga dinámicamente -->
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-green-700 dark:bg-green-900 text-white text-center py-6">
+    <p>&copy; 2025 Protección Civil - Universidad de Colima</p>
+  </footer>
+
+  <script>
+    const API_URL = 'http://localhost:3000/api/';
+
+    // Dark Mode
+    const btn = document.getElementById('darkModeToggle');
+    const html = document.documentElement;
+    if (localStorage.getItem('darkMode') === 'true') {
+      html.classList.add('dark');
+      btn.textContent = "🌞";
+    }
+    btn.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      btn.textContent = html.classList.contains('dark') ? "🌞" : "🌙";
+      localStorage.setItem('darkMode', html.classList.contains('dark'));
+    });
+
+    // Cargar Brigadas
+    async function cargarBrigadas() {
+      try {
+        const res = await fetch(API_URL + 'brigadas');
+        const data = await res.json();
+        const lista = document.getElementById('listaBrigadas');
+        
+        if (data.success && data.data.length > 0) {
+          lista.innerHTML = data.data.map(brig => `
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition">
+              <h3 class="text-2xl font-bold text-green-700 dark:text-green-400 mb-3">${brig.nombre}</h3>
+              <p class="text-gray-600 dark:text-gray-300 mb-4">${brig.descripcion}</p>
+              <div class="bg-gray-50 dark:bg-gray-700 rounded p-4 mb-4 space-y-2 text-sm">
+                <p><strong>Coordinador:</strong> ${brig.coordinador}</p>
+                <p><strong>Email:</strong> ${brig.email_coordinador}</p>
+                <p><strong>Teléfono:</strong> ${brig.telefono_coordinador}</p>
+                <p><strong>Miembros activos:</strong> ${brig.miembros_activos}</p>
+              </div>
+              <a href="solicitud-brigada.html?id=${brig.id}&nombre=${encodeURIComponent(brig.nombre)}" 
+                 class="block w-full bg-green-700 hover:bg-green-800 text-white text-center py-3 rounded font-bold transition">
+                Solicitar Ingreso
+              </a>
+            </div>
+          `).join('');
+        } else {
+          lista.innerHTML = '<p class="text-center text-gray-500 col-span-3">No hay brigadas disponibles</p>';
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('listaBrigadas').innerHTML = '<p class="text-center text-red-500 col-span-3">Error al cargar brigadas</p>';
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', cargarBrigadas);
+  </script>
+
+</body>
+</html>

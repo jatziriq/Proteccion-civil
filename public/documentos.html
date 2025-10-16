@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentos - Protección Civil</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' }
+  </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900">
+
+  <!-- Navbar -->
+  <header class="bg-green-700 text-white shadow-md dark:bg-green-900 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+      <div class="flex items-center space-x-3">
+        <img src="ProtecCivil.jpg" alt="Logo" class="h-12 w-12 rounded-full border-2 border-white">
+        <h1 class="text-xl font-bold">Protección Civil - UdeC</h1>
+      </div>
+      <nav>
+        <ul class="flex space-x-6">
+          <li><a href="index.html" class="hover:text-yellow-300">Inicio</a></li>
+          <li><a href="novedades.html" class="hover:text-yellow-300">Novedades</a></li>
+          <li><a href="brigadas.html" class="hover:text-yellow-300">Brigadas</a></li>
+          <li><a href="cursos.html" class="hover:text-yellow-300">Cursos</a></li>
+          <li><a href="documentos.html" class="text-yellow-300 font-bold">Documentos</a></li>
+          <li><a href="contacto.html" class="hover:text-yellow-300">Contacto</a></li>
+        </ul>
+      </nav>
+      <button id="darkModeToggle" class="ml-4 px-3 py-2 bg-white text-green-700 rounded">🌙</button>
+    </div>
+  </header>
+
+  <!-- Título -->
+  <section class="bg-purple-600 dark:bg-purple-800 text-white py-12">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+      <h1 class="text-4xl font-bold">Centro de Documentación</h1>
+      <p class="text-lg mt-2">Manuales, protocolos y guías disponibles</p>
+    </div>
+  </section>
+
+  <!-- Lista de Documentos -->
+  <section class="max-w-6xl mx-auto py-16 px-6">
+    <div id="listaDocumentos" class="grid md:grid-cols-2 gap-6">
+      <!-- Se carga dinámicamente -->
+    </div>
+  </section>
+
+  <!-- Modal Visualizador -->
+  <div id="modalVisualizador" class="hidden fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-lg w-full max-w-6xl h-5/6 flex flex-col">
+      <div class="flex justify-between items-center p-4 border-b dark:border-gray-700">
+        <h3 id="tituloDocumento" class="text-xl font-bold text-gray-800 dark:text-white"></h3>
+        <button onclick="cerrarVisualizador()" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 text-3xl">
+          &times;
+        </button>
+      </div>
+      <div class="flex-1 overflow-hidden">
+        <iframe id="visorPDF" class="w-full h-full" frameborder="0"></iframe>
+      </div>
+      <div class="p-4 border-t dark:border-gray-700 flex gap-4">
+        <a id="btnDescargar" href="#" download class="flex-1 bg-green-600 hover:bg-green-700 text-white text-center py-3 rounded font-bold transition">
+          📥 Descargar PDF
+        </a>
+        <button onclick="cerrarVisualizador()" class="px-6 py-3 border-2 border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-green-700 dark:bg-green-900 text-white text-center py-6">
+    <p>&copy; 2025 Protección Civil - Universidad de Colima</p>
+  </footer>
+
+  <script>
+    const API_URL = 'http://localhost:3000/api/';
+
+    // Dark Mode
+    const btn = document.getElementById('darkModeToggle');
+    const html = document.documentElement;
+    if (localStorage.getItem('darkMode') === 'true') {
+      html.classList.add('dark');
+      btn.textContent = "🌞";
+    }
+    btn.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      btn.textContent = html.classList.contains('dark') ? "🌞" : "🌙";
+      localStorage.setItem('darkMode', html.classList.contains('dark'));
+    });
+
+    // Cargar Documentos
+    async function cargarDocumentos() {
+      try {
+        const res = await fetch(API_URL + 'documentos');
+        const data = await res.json();
+        const lista = document.getElementById('listaDocumentos');
+        
+        if (data.success && data.data.length > 0) {
+          lista.innerHTML = data.data.map(doc => {
+            const tipoColors = {
+              'manual': 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300',
+              'protocolo': 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300',
+              'guia': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300',
+              'reporte': 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300',
+              'otro': 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'
+            };
+            const tipoColor = tipoColors[doc.tipo_documento] || tipoColors['otro'];
+            
+            return `
+              <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition">
+                <div class="flex items-start gap-4">
+                  <div class="text-5xl">📄</div>
+                  <div class="flex-1">
+                    <span class="${tipoColor} px-3 py-1 rounded-full text-xs font-bold uppercase">${doc.tipo_documento}</span>
+                    <h3 class="text-xl font-bold text-gray-800 dark:text-white mt-2 mb-2">${doc.titulo}</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">${doc.descripcion}</p>
+                    <div class="flex gap-3">
+                      <button onclick='visualizar("${doc.archivo_url}", "${doc.titulo}")' class="flex-1 bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded font-semibold transition">
+                        👁️ Visualizar
+                      </button>
+                      <a href="${doc.archivo_url}" download class="flex-1 bg-green-600 hover:bg-green-700 text-white text-center py-2 px-4 rounded font-semibold transition">
+                        📥 Descargar
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        } else {
+          lista.innerHTML = '<p class="text-center text-gray-500 col-span-2">No hay documentos disponibles</p>';
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    // Visualizar documento
+    function visualizar(url, titulo) {
+      document.getElementById('modalVisualizador').classList.remove('hidden');
+      document.getElementById('tituloDocumento').textContent = titulo;
+      document.getElementById('visorPDF').src = url;
+      document.getElementById('btnDescargar').href = url;
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Cerrar visualizador
+    function cerrarVisualizador() {
+      document.getElementById('modalVisualizador').classList.add('hidden');
+      document.getElementById('visorPDF').src = '';
+      document.body.style.overflow = 'auto';
+    }
+
+    // Cerrar con tecla ESC
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        cerrarVisualizador();
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', cargarDocumentos);
+  </script>
+
+</body>
+</html>

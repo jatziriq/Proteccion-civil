@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Protección Civil - Universidad de Colima</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = { darkMode: 'class' }
+  </script>
+  <style>
+    body { transition: background-color 0.3s ease, color 0.3s ease; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200">
+
+  <!-- Navbar -->
+  <header class="bg-green-700 text-white shadow-md dark:bg-green-900 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+      <div class="flex items-center space-x-3">
+        <img src="ProtecCivil.jpg" alt="Logo" class="h-12 w-12 rounded-full border-2 border-white">
+        <h1 class="text-xl font-bold">Protección Civil - UdeC</h1>
+      </div>
+      <nav>
+        <ul class="flex space-x-6">
+          <li><a href="index.html" class="hover:text-yellow-300">Inicio</a></li>
+          <li><a href="novedades.html" class="hover:text-yellow-300">Novedades</a></li>
+          <li><a href="brigadas.html" class="hover:text-yellow-300">Brigadas</a></li>
+          <li><a href="cursos.html" class="hover:text-yellow-300">Cursos</a></li>
+          <li><a href="documentos.html" class="hover:text-yellow-300">Documentos</a></li>
+          <li><a href="contacto.html" class="hover:text-yellow-300">Contacto</a></li>
+          <li><a href="emergencias.html" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-full font-bold animate-pulse">🚨 EMERGENCIAS</a></li>
+        </ul>
+      </nav>
+      <button id="darkModeToggle" class="ml-4 px-3 py-2 bg-white text-green-700 rounded shadow hover:bg-gray-200 dark:bg-gray-800 dark:text-yellow-300 dark:hover:bg-gray-700 transition">
+        🌙
+      </button>
+    </div>
+  </header>
+
+  <!-- Redes Sociales flotantes -->
+  <div class="fixed right-6 top-1/2 transform -translate-y-1/2 z-40 space-y-3">
+    <a href="https://facebook.com" target="_blank" class="block bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition transform hover:scale-110" title="Facebook">
+      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+    </a>
+    <a href="https://twitter.com" target="_blank" class="block bg-sky-500 hover:bg-sky-600 text-white p-3 rounded-full shadow-lg transition transform hover:scale-110" title="Twitter">
+      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+    </a>
+    <a href="https://instagram.com" target="_blank" class="block bg-gradient-to-br from-purple-600 to-pink-500 hover:from-purple-700 hover:to-pink-600 text-white p-3 rounded-full shadow-lg transition transform hover:scale-110" title="Instagram">
+      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+    </a>
+    <a href="https://youtube.com" target="_blank" class="block bg-red-600 hover:bg-red-700 text-white p-3 rounded-full shadow-lg transition transform hover:scale-110" title="YouTube">
+      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+    </a>
+  </div>
+
+  <!-- Hero -->
+  <section class="bg-gradient-to-r from-green-600 to-green-800 dark:from-green-800 dark:to-green-900 text-white text-center py-20">
+    <div class="max-w-4xl mx-auto px-6">
+      <h2 class="text-5xl font-bold mb-4">Bienvenidos a Protección Civil</h2>
+      <p class="text-2xl mb-6">Universidad de Colima</p>
+      <p class="text-lg mb-8">Comprometidos con la seguridad de la comunidad universitaria</p>
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href="brigadas.html" class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-3 px-8 rounded-full transition transform hover:scale-105">
+          Únete a una Brigada
+        </a>
+        <a href="cursos.html" class="bg-white hover:bg-gray-100 text-green-700 font-bold py-3 px-8 rounded-full transition transform hover:scale-105">
+          Ver Cursos
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Historia con imágenes -->
+  <section class="max-w-6xl mx-auto py-20 px-6">
+    <div class="text-center mb-12">
+      <h2 class="text-4xl font-bold text-green-700 dark:text-green-400 mb-4">Historia de la Institución</h2>
+      <div class="w-24 h-1 bg-green-600 mx-auto"></div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-10 items-center mb-12">
+      <div>
+        <img src="https://scontent-qro1-1.xx.fbcdn.net/v/t39.30808-6/486322676_664423522803854_3549781801291624442_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=86c6b0&_nc_eui2=AeFLXCuI_DRiZM68X2VALVC9xmrw_i91oIzGavD-L3WgjKg6AU_3c3lX5QuwagMdZFDXUZbgQa_Qc2PxTYkA32VZ&_nc_ohc=6McFvp2jn7IQ7kNvwGtuVaK&_nc_oc=Adl7o88QngCRysHx6_4oDKQq9lbaMYCyJgKbsbjPaD4COjR9ByRS7APAQw_wh7K-vvs&_nc_zt=23&_nc_ht=scontent-qro1-1.xx&_nc_gid=OMubfqVjZ7aWnHpVEh3btw&oh=00_Afdsv6lyOoyQ7l1wg_QXB9swRQGjjnZcI-buZ0XBtPlSKQ&oe=68F58F69" alt="Protección Civil" class="rounded-lg shadow-xl">
+      </div>
+      <div>
+        <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Nuestra Misión</h3>
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+          El Sistema Universitario de Protección Civil, se fortalece mediante el alumnado canalizándolo a la Brigada Universitaria de Primeros Auxilios (BUPA), el cual se establece como una respuesta a la necesidad de conformar una efectiva coordinación de prácticas entre docentes y alumnos.
+        </p>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-10 items-center">
+      <div class="order-2 md:order-1">
+        <h3 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">Nuestro Compromiso</h3>
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+          Para alcanzar una mayor y mejor protección, auxiliando a la comunidad universitaria y a la sociedad en general, en caso de desastre así como proteger su patrimonio y medio ecológico.
+        </p>
+      </div>
+      <div class="order-1 md:order-2">
+        <img src="https://scontent-qro1-1.xx.fbcdn.net/v/t39.30808-6/528323454_1190412139557709_4752886409432557013_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeGY3ZzcVT4UehlqoLSv-Rg9-PDVuaeAAFn48NW5p4AAWY_kPBVFQCBR1I9pr019IRxoVv1UGZqzDBXr2bUopOrh&_nc_ohc=Q_ur3do5oloQ7kNvwHi1oEV&_nc_oc=Adnee-2L74-FnTkJuiRXrqQVrRxnQ4xB3BT5l5oErZE4LDTTDZSeNvD0l1PBhTgvAeU&_nc_zt=23&_nc_ht=scontent-qro1-1.xx&_nc_gid=cEbE085GLBy3bbxuKTbP-g&oh=00_AfeDdEpqJAbx1vaikGPO_IZPMi0iuczDV4HBRikSEJBWvw&oe=68F558DF" alt="Protección civil" class="rounded-lg shadow-xl">
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de acceso rápido -->
+  <section class="bg-green-50 dark:bg-gray-800 py-16">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center text-green-700 dark:text-green-400 mb-12">Acceso Rápido</h2>
+      <div class="grid md:grid-cols-3 gap-8">
+        <a href="novedades.html" class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-lg hover:shadow-xl transition transform hover:-translate-y-1">
+          <div class="text-5xl mb-4 text-center">📰</div>
+          <h3 class="text-xl font-bold text-center mb-2">Novedades</h3>
+          <p class="text-gray-600 dark:text-gray-300 text-center">Mantente informado</p>
+        </a>
+        <a href="brigadas.html" class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-lg hover:shadow-xl transition transform hover:-translate-y-1">
+          <div class="text-5xl mb-4 text-center">👥</div>
+          <h3 class="text-xl font-bold text-center mb-2">Brigadas</h3>
+          <p class="text-gray-600 dark:text-gray-300 text-center">Únete al equipo</p>
+        </a>
+        <a href="cursos.html" class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-lg hover:shadow-xl transition transform hover:-translate-y-1">
+          <div class="text-5xl mb-4 text-center">📚</div>
+          <h3 class="text-xl font-bold text-center mb-2">Cursos</h3>
+          <p class="text-gray-600 dark:text-gray-300 text-center">Capacítate</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-green-700 dark:bg-green-900 text-white py-8">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-6">
+        <h3 class="text-xl font-bold mb-2">Protección Civil - Universidad de Colima</h3>
+        <p class="text-green-100">📧 proteccioncivil@ucol.mx | 📞 312-XXX-XXXX</p>
+      </div>
+      <div class="flex justify-center space-x-6 mb-6">
+        <a href="https://facebook.com" target="_blank" class="hover:text-yellow-300 transition">Facebook</a>
+        <a href="https://twitter.com" target="_blank" class="hover:text-yellow-300 transition">Twitter</a>
+        <a href="https://instagram.com" target="_blank" class="hover:text-yellow-300 transition">Instagram</a>
+        <a href="https://youtube.com" target="_blank" class="hover:text-yellow-300 transition">YouTube</a>
+      </div>
+      <div class="border-t border-green-600 pt-4 text-center text-sm">
+        <p>&copy; 2025 Protección Civil - Universidad de Colima. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Dark Mode
+    const btn = document.getElementById('darkModeToggle');
+    const html = document.documentElement;
+
+    if (localStorage.getItem('darkMode') === 'true') {
+      html.classList.add('dark');
+      btn.textContent = "🌞";
+    }
+
+    btn.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      btn.textContent = html.classList.contains('dark') ? "🌞" : "🌙";
+      localStorage.setItem('darkMode', html.classList.contains('dark'));
+    });
+  </script>
+
+</body>
+</html>
