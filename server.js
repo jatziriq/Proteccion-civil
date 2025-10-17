@@ -11,7 +11,14 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
-app.use(express.static('public'));
+
+// Servir archivos estáticos con rutas absolutas para Windows
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));  // 👈 Ruta absoluta
+
+// Log para verificar las rutas
+console.log('📁 Ruta public:', path.join(__dirname, 'public'));
+console.log('📁 Ruta uploads:', path.join(__dirname, 'uploads'));
 
 // Configuración de la base de datos con variables de entorno
 const db = mysql.createConnection({
@@ -339,6 +346,7 @@ app.use((req, res) => {
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Servidor corriendo en puerto ${PORT}`);
   console.log(`📊 API disponible en /api/`);
+  console.log(`📁 Carpeta uploads servida en /uploads/`);  // 👈 Mensaje agregado
   console.log(`🌍 Entorno: ${process.env.NODE_ENV || 'development'}`);
   console.log(`⏰ Iniciado: ${new Date().toLocaleString()}`);
 });
