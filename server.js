@@ -1,4 +1,3 @@
-// server.js - Configurado para Railway
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
@@ -14,21 +13,20 @@ app.use(bodyParser.json());
 
 // Servir archivos estáticos con rutas absolutas para Windows
 app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));  // 👈 Ruta absoluta
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));  
 
 // Log para verificar las rutas
 console.log('📁 Ruta public:', path.join(__dirname, 'public'));
 console.log('📁 Ruta uploads:', path.join(__dirname, 'uploads'));
 
-// Configuración de la base de datos con variables de entorno
+// Configuración de la base de datos
 const db = mysql.createConnection({
-  host: process.env.MYSQLHOST || 'localhost',
-  port: process.env.MYSQLPORT || 3306,
-  user: process.env.MYSQLUSER || 'root',
-  password: process.env.MYSQLPASSWORD || '123456',
-  database: process.env.MYSQLDATABASE || 'proteccion_civil',
-  charset: 'utf8mb4',
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined
+  host: 'localhost',
+  port: 3306,
+  user: 'root',
+  password: '123456',
+  database: 'proteccion_civil',
+  charset: 'utf8mb4'
 });
 
 // Conectar a la base de datos con reintentos
