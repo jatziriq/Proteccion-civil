@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Brigadista - Protección Civil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/auth.js"></script>
+    <style>
+        body { transition: background-color 0.3s ease; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200">
+
+    <header class="bg-green-700 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+            <div class="flex items-center space-x-4">
+                <img src="images/logo.jpg" alt="Logo" class="h-16 w-16 rounded-full border-2 border-white">
+                <h1 class="text-2xl font-bold">Dashboard Brigadista</h1>
+            </div>
+
+            <nav>
+                <ul class="flex space-x-6">
+                    <li><a href="index.html" class="hover:text-yellow-300">Inicio</a></li>
+                    <li><a href="busqueda.html" class="hover:text-yellow-300">Brigadistas</a></li>
+                    <li><a href="cursos.html" class="hover:text-yellow-300">Mis Cursos</a></li>
+                    <li><a href="emergencias.html" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-full font-bold">🚨EMERGENCIAS</a></li>
+                </ul>
+            </nav>
+
+            <div class="flex items-center space-x-3">
+                <span id="userName" class="font-semibold"></span>
+                <button onclick="Auth.logout()" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-full shadow transition">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-8">
+        <!-- Estadísticas Personales -->
+        <div class="grid md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">Horas de Servicio</p>
+                        <h3 id="horasServicio" class="text-3xl font-bold text-green-600">0</h3>
+                    </div>
+                    <div class="text-5xl">⏱️</div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">Emergencias Atendidas</p>
+                        <h3 id="emergenciasAtendidas" class="text-3xl font-bold text-blue-600">0</h3>
+                    </div>
+                    <div class="text-5xl">🚑</div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">Cursos Completados</p>
+                        <h3 id="cursosCompletados" class="text-3xl font-bold text-purple-600">0</h3>
+                    </div>
+                    <div class="text-5xl">📜</div>
+                </div>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm">Estado</p>
+                        <h3 id="estado" class="text-xl font-bold text-green-600">Disponible</h3>
+                    </div>
+                    <div class="text-5xl">✅</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Perfil del Brigadista -->
+        <div class="grid md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold mb-6 text-green-700 dark:text-green-400">Mi Perfil</h2>
+                <div id="perfil" class="space-y-4">
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="font-semibold">Nombre:</span>
+                        <span id="perfilNombre">Cargando...</span>
+                    </div>
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="font-semibold">Email:</span>
+                        <span id="perfilEmail">Cargando...</span>
+                    </div>
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="font-semibold">Brigada:</span>
+                        <span id="perfilBrigada">Cargando...</span>
+                    </div>
+                    <div class="flex justify-between border-b pb-2">
+                        <span class="font-semibold">Facultad:</span>
+                        <span id="perfilFacultad">Cargando...</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="font-semibold">Fecha de Ingreso:</span>
+                        <span id="perfilFechaIngreso">Cargando...</span>
+                    </div>
+                </div>
+                <button onclick="actualizarUbicacion()" class="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg">
+                    📍 Actualizar Mi Ubicación
+                </button>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold mb-6 text-green-700 dark:text-green-400">Cursos que Imparto</h2>
+                <div id="cursosImparte" class="space-y-3">
+                    <p class="text-gray-600">Cargando...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Certificaciones y Capacitaciones -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <h2 class="text-2xl font-bold mb-6 text-green-700 dark:text-green-400">Mis Certificaciones</h2>
+            <div id="certificaciones" class="grid md:grid-cols-3 gap-4">
+                <p class="text-gray-600">Cargando...</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-green-700 text-white py-8 mt-12">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <p>&copy; 2025 Protección Civil - Universidad de Colima</p>
+        </div>
+    </footer>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+        
+        // Proteger página - solo brigadistas
+        if (!Auth.protectPage(['brigadista'])) {
+            // Ya redirige automáticamente
+        }
+
+        // Cargar datos del brigadista
+        async function cargarDatosBrigadista() {
+            const user = Auth.getCurrentUser();
+            document.getElementById('userName').textContent = user.nombre;
+
+            try {
+                const response = await Auth.authenticatedFetch(
+                    `${API_URL}/estadisticas/brigadista/${encodeURIComponent(user.email)}`
+                );
+                const data = await response.json();
+
+                if (data.success) {
+                    const brigadista = data.data;
+                    mostrarDatosBrigadista(brigadista);
+                } else {
+                    alert('No se encontró tu perfil de brigadista. Contacta al administrador.');
+                }
+            } catch (error) {
+                console.error('Error cargando datos:', error);
+                alert('Error al cargar tus datos. Es posible que no estés registrado como brigadista.');
+            }
+        }
+
+        function mostrarDatosBrigadista(b) {
+            // Estadísticas
+            document.getElementById('horasServicio').textContent = b.horas_servicio || 0;
+            document.getElementById('cursosCompletados').textContent = b.cursos_completados || 0;
+            document.getElementById('estado').textContent = formatearEstado(b.estado_disponibilidad);
+            
+            // Perfil
+            document.getElementById('perfilNombre').textContent = b.nombre_completo;
+            document.getElementById('perfilEmail').textContent = b.email;
+            document.getElementById('perfilBrigada').textContent = b.brigada_nombre;
+            document.getElementById('perfilFacultad').textContent = b.facultad || 'No especificada';
+            document.getElementById('perfilFechaIngreso').textContent = new Date(b.fecha_ingreso).toLocaleDateString();
+
+            // Cursos que imparte
+            if (b.cursos_imparte) {
+                const cursosDiv = document.getElementById('cursosImparte');
+                cursosDiv.innerHTML = b.cursos_imparte.split(', ').map(curso => `
+                    <div class="p-3 bg-green-100 dark:bg-green-900 rounded-lg">
+                        <p class="font-semibold">📚 ${curso}</p>
+                    </div>
+                `).join('');
+            } else {
+                document.getElementById('cursosImparte').innerHTML = '<p class="text-gray-600">No impartes cursos actualmente</p>';
+            }
+
+            // Certificaciones
+            mostrarCertificaciones(b.certificaciones);
+            
+            // Guardar ID del brigadista para actualizar ubicación
+            window.brigadistaId = b.id;
+        }
+
+        function formatearEstado(estado) {
+            const estados = {
+                'disponible': '✅ Disponible',
+                'en_servicio': '🟡 En Servicio',
+                'no_disponible': '🔴 No Disponible',
+                'fuera_de_servicio': '⚫ Fuera de Servicio'
+            };
+            return estados[estado] || estado;
+        }
+
+        function mostrarCertificaciones(certs) {
+            const certsDiv = document.getElementById('certificaciones');
+            const certificaciones = [
+                { nombre: 'Primeros Auxilios Básico', fecha: '2024-01-15', valido: true },
+                { nombre: 'RCP Avanzado', fecha: '2024-03-20', valido: true },
+                { nombre: 'Combate de Incendios', fecha: '2023-11-10', valido: false }
+            ];
+
+            certsDiv.innerHTML = certificaciones.map(cert => `
+                <div class="p-4 ${cert.valido ? 'bg-green-100 dark:bg-green-900' : 'bg-gray-100 dark:bg-gray-700'} rounded-lg">
+                    <h4 class="font-bold mb-1">${cert.nombre}</h4>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Emitido: ${new Date(cert.fecha).toLocaleDateString()}</p>
+                    <span class="text-xs ${cert.valido ? 'text-green-600' : 'text-red-600'} font-semibold">
+                        ${cert.valido ? '✓ Vigente' : '✗ Renovar'}
+                    </span>
+                </div>
+            `).join('');
+        }
+
+        async function actualizarUbicacion() {
+            if (!window.brigadistaId) {
+                alert('Error: No se pudo identificar tu perfil de brigadista');
+                return;
+            }
+
+            if (!navigator.geolocation) {
+                alert('Tu navegador no soporta geolocalización');
+                return;
+            }
+
+            const loading = confirm('¿Deseas actualizar tu ubicación actual?');
+            if (!loading) return;
+
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    const { latitude, longitude } = position.coords;
+                    const ubicacion = prompt('Describe tu ubicación actual:', 'Campus Central');
+                    
+                    if (!ubicacion) return;
+
+                    try {
+                        const response = await Auth.authenticatedFetch(
+                            `${API_URL}/brigadistas/${window.brigadistaId}/ubicacion`,
+                            {
+                                method: 'PUT',
+                                body: JSON.stringify({
+                                    latitud: latitude,
+                                    longitud: longitude,
+                                    ubicacion: ubicacion,
+                                    estado: 'disponible'
+                                })
+                            }
+                        );
+
+                        const data = await response.json();
+                        if (data.success) {
+                            alert('✅ Ubicación actualizada correctamente');
+                            location.reload();
+                        } else {
+                            alert('Error: ' + (data.message || 'No se pudo actualizar'));
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('Error al actualizar ubicación');
+                    }
+                },
+                (error) => {
+                    alert('No se pudo obtener tu ubicación: ' + error.message);
+                }
+            );
+        }
+
+        // Cargar datos al iniciar
+        cargarDatosBrigadista();
+    </script>
+</body>
+</html>

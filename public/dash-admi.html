@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - Protección Civil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/auth.js"></script>
+</head>
+<body class="bg-gray-50">
+
+    <header class="bg-green-700 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+            <div class="flex items-center space-x-4">
+                <img src="images/logo.jpg" alt="Logo" class="h-16 w-16 rounded-full border-2 border-white">
+                <h1 class="text-2xl font-bold">Panel de Administración</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span id="userName" class="font-semibold"></span>
+                <button onclick="Auth.logout()" class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-full">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="flex">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-white shadow-lg min-h-screen p-6">
+            <nav class="space-y-2">
+                <a href="#dashboard" onclick="showSection('dashboard')" class="block px-4 py-2 rounded hover:bg-green-100 font-semibold">📊Dashboard</a>
+                <a href="#usuarios" onclick="showSection('usuarios')" class="block px-4 py-2 rounded hover:bg-green-100">Usuarios</a>
+                <a href="#brigadistas" onclick="showSection('brigadistas')" class="block px-4 py-2 rounded hover:bg-green-100">Brigadistas</a>
+                <a href="#cursos" onclick="showSection('cursos')" class="block px-4 py-2 rounded hover:bg-green-100">Cursos</a>
+                <a href="#emergencias" onclick="showSection('emergencias')" class="block px-4 py-2 rounded hover:bg-green-100">Emergencias</a>
+                <a href="#documentos" onclick="showSection('documentos')" class="block px-4 py-2 rounded hover:bg-green-100">Documentos</a>
+                <a href="#novedades" onclick="showSection('novedades')" class="block px-4 py-2 rounded hover:bg-green-100">Novedades</a>
+                <a href="#reportes" onclick="showSection('reportes')" class="block px-4 py-2 rounded hover:bg-green-100">Reportes</a>
+                <hr class="my-4">
+                <a href="index.html" class="block px-4 py-2 rounded hover:bg-gray-100">🏠Ir al Sitio</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+            <!-- Dashboard Section -->
+            <section id="dashboard-section" class="section">
+                <h2 class="text-3xl font-bold mb-6">Panel de Control</h2>
+                
+                <!-- Estadísticas Generales -->
+                <div class="grid grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-gray-600 text-sm">Total Usuarios</p>
+                                <h3 id="totalUsuarios" class="text-3xl font-bold text-blue-600">0</h3>
+                            </div>
+                            <div class="text-5xl">👥</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-gray-600 text-sm">Brigadistas Activos</p>
+                                <h3 id="totalBrigadistas" class="text-3xl font-bold text-green-600">0</h3>
+                            </div>
+                            <div class="text-5xl">🚑</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-gray-600 text-sm">Emergencias Activas</p>
+                                <h3 id="emergenciasActivas" class="text-3xl font-bold text-red-600">0</h3>
+                            </div>
+                            <div class="text-5xl">🚨</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-gray-600 text-sm">Solicitudes Pendientes</p>
+                                <h3 id="solicitudesPendientes" class="text-3xl font-bold text-yellow-600">0</h3>
+                            </div>
+                            <div class="text-5xl">📋</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actividad Reciente -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-bold mb-4">Actividad Reciente</h3>
+                    <div id="actividadReciente" class="space-y-3">
+                        <p class="text-gray-600">Cargando actividad...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Usuarios Section -->
+            <section id="usuarios-section" class="section hidden">
+                <h2 class="text-3xl font-bold mb-6">Gestión de Usuarios</h2>
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="flex justify-between mb-4">
+                        <input type="text" id="searchUsuarios" placeholder="Buscar usuarios..." 
+                            class="px-4 py-2 border rounded-lg w-64">
+                        <button onclick="nuevoUsuario()" class="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700">
+                            + Nuevo Usuario
+                        </button>
+                    </div>
+                    <table class="w-full">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="p-3 text-left">ID</th>
+                                <th class="p-3 text-left">Nombre</th>
+                                <th class="p-3 text-left">Email</th>
+                                <th class="p-3 text-left">Rol</th>
+                                <th class="p-3 text-left">Fecha Registro</th>
+                                <th class="p-3 text-left">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaUsuarios">
+                            <tr><td colspan="6" class="p-4 text-center">Cargando...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Brigadistas Section -->
+            <section id="brigadistas-section" class="section hidden">
+                <h2 class="text-3xl font-bold mb-6">Gestión de Brigadistas</h2>
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="mb-4 flex gap-4">
+                        <input type="text" placeholder="Buscar brigadista..." class="px-4 py-2 border rounded-lg flex-1">
+                        <select class="px-4 py-2 border rounded-lg">
+                            <option value="">Todas las brigadas</option>
+                            <option value="1">Primeros Auxilios</option>
+                            <option value="2">Evacuación</option>
+                            <option value="3">Incendios</option>
+                        </select>
+                        <a href="busqueda.html" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                            🗺️ Ver Mapa
+                        </a>
+                    </div>
+                    <div id="listaBrigadistas">
+                        <p class="text-center text-gray-600 py-8">Cargando brigadistas...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Más secciones... -->
+        </main>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+
+        // Proteger página - solo admin
+        if (!Auth.protectPage(['admin'])) {
+            // Ya redirige automáticamente
+        }
+
+        // Mostrar nombre de usuario
+        const user = Auth.getCurrentUser();
+        document.getElementById('userName').textContent = user.nombre;
+
+        // Gestión de secciones
+        function showSection(section) {
+            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+            document.getElementById(section + '-section').classList.remove('hidden');
+        }
+
+        // Cargar estadísticas
+        async function cargarEstadisticas() {
+            try {
+                const response = await Auth.authenticatedFetch(`${API_URL}/estadisticas/admin`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('totalUsuarios').textContent = data.data.totalUsuarios || 0;
+                    document.getElementById('totalBrigadistas').textContent = data.data.totalBrigadistas || 0;
+                    document.getElementById('emergenciasActivas').textContent = data.data.emergenciasActivas || 0;
+                    document.getElementById('solicitudesPendientes').textContent = data.data.solicitudesPendientes || 0;
+                }
+
+                // Cargar actividad reciente
+                cargarActividadReciente();
+            } catch (error) {
+                console.error('Error cargando estadísticas:', error);
+                alert('Error al cargar estadísticas');
+            }
+        }
+
+        // Cargar actividad reciente
+        async function cargarActividadReciente() {
+            try {
+                const response = await Auth.authenticatedFetch(`${API_URL}/estadisticas/actividad-reciente`);
+                const data = await response.json();
+                
+                if (data.success && data.data.length > 0) {
+                    const container = document.getElementById('actividadReciente');
+                    container.innerHTML = data.data.map(act => {
+                        const iconos = {
+                            'inscripcion': '📚',
+                            'solicitud': '🚑',
+                            'usuario': '👤',
+                            'emergencia': '🚨'
+                        };
+                        return `
+                            <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                                <span class="text-2xl">${iconos[act.tipo] || '📋'}</span>
+                                <div class="flex-1">
+                                    <p class="text-sm">${act.descripcion}</p>
+                                    <p class="text-xs text-gray-500">${new Date(act.fecha).toLocaleString()}</p>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    document.getElementById('actividadReciente').innerHTML = 
+                        '<p class="text-center text-gray-600 py-4">No hay actividad reciente</p>';
+                }
+            } catch (error) {
+                console.error('Error cargando actividad:', error);
+            }
+        }
+
+        // Cargar usuarios
+        async function cargarUsuarios() {
+            try {
+                const response = await Auth.authenticatedFetch(`${API_URL}/usuarios`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    mostrarUsuarios(data.data);
+                }
+            } catch (error) {
+                console.error('Error cargando usuarios:', error);
+                document.getElementById('tablaUsuarios').innerHTML = 
+                    '<tr><td colspan="6" class="p-4 text-center text-red-600">Error al cargar usuarios</td></tr>';
+            }
+        }
+
+        // Cargar brigadistas
+        async function cargarBrigadistas() {
+            try {
+                const response = await fetch(`${API_URL}/brigadistas/buscar`);
+                const data = await response.json();
+                
+                if (data.success && data.data.length > 0) {
+                    const container = document.getElementById('listaBrigadistas');
+                    container.innerHTML = data.data.map(b => `
+                        <div class="border-b py-4 flex justify-between items-center">
+                            <div>
+                                <p class="font-bold">${b.nombre_completo}</p>
+                                <p class="text-sm text-gray-600">${b.brigada_nombre} - ${b.facultad || 'N/A'}</p>
+                            </div>
+                            <div>
+                                <span class="px-3 py-1 rounded-full text-xs ${
+                                    b.estado_disponibilidad === 'disponible' ? 'bg-green-100 text-green-700' :
+                                    b.estado_disponibilidad === 'en_servicio' ? 'bg-yellow-100 text-yellow-700' :
+                                    'bg-red-100 text-red-700'
+                                }">
+                                    ${b.estado_disponibilidad}
+                                </span>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    document.getElementById('listaBrigadistas').innerHTML = 
+                        '<p class="text-center text-gray-600 py-8">No hay brigadistas registrados</p>';
+                }
+            } catch (error) {
+                console.error('Error cargando brigadistas:', error);
+            }
+        }
+
+        function mostrarUsuarios(usuarios) {
+            const tbody = document.getElementById('tablaUsuarios');
+            tbody.innerHTML = usuarios.map(u => `
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="p-3">${u.id}</td>
+                    <td class="p-3">${u.nombre}</td>
+                    <td class="p-3">${u.email}</td>
+                    <td class="p-3"><span class="px-2 py-1 bg-blue-100 text-blue-700 rounded">${u.rol}</span></td>
+                    <td class="p-3">${new Date(u.fecha_registro).toLocaleDateString()}</td>
+                    <td class="p-3">
+                        <button onclick="editarUsuario(${u.id})" class="text-blue-600 hover:underline">Editar</button>
+                        <button onclick="eliminarUsuario(${u.id})" class="text-red-600 hover:underline ml-2">Eliminar</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function nuevoUsuario() {
+            alert('Funcionalidad de crear usuario en desarrollo');
+        }
+
+        function editarUsuario(id) {
+            alert(`Editar usuario ${id}`);
+        }
+
+        function eliminarUsuario(id) {
+            if (confirm('¿Estás seguro de eliminar este usuario?')) {
+                alert(`Usuario ${id} eliminado`);
+            }
+        }
+
+        // Cargar datos iniciales
+        cargarEstadisticas();
+        cargarUsuarios();
+        cargarBrigadistas();
+    </script>
+</body>
+</html>

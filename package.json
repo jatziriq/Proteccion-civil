@@ -1,25 +1,19 @@
 {
-  "name": "proteccion-civil",
+  "name": "proteccion-civil-backend",
   "version": "1.0.0",
-  "description": "API y página web de Protección Civil",
-  "main": "index.js",
+  "description": "Backend para sistema de Protección Civil",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "body-parser": "^2.2.0",
+    "bcrypt": "^5.1.1",
+    "body-parser": "^1.20.2",
     "cors": "^2.8.5",
-    "express": "^5.1.0",
-    "mysql2": "^3.15.2"
-  },
-
-   "engines": {
-    "node": ">=18"
+    "express": "^4.18.2",
+    "express-session": "^1.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.6.5"
   }
-
-
 }

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Brigadistas - Protección Civil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body { transition: background-color 0.3s ease, color 0.3s ease; }
+        #map { height: 500px; border-radius: 1rem; }
+        .leaflet-popup-content-wrapper { border-radius: 0.5rem; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200">
+
+    <header class="bg-green-700 text-white shadow-md dark:bg-green-900 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+            <div class="flex items-center space-x-4">
+                <img src="images/logo.jpg" alt="Logo" class="h-16 w-16 rounded-full border-2 border-white">
+                <h1 class="text-2xl font-bold">Búsqueda de Brigadistas</h1>
+            </div>
+
+            <nav>
+                <ul class="flex space-x-6">
+                    <li><a href="index.html" class="hover:text-yellow-300">Inicio</a></li>
+                    <li><a href="brigadas.html" class="hover:text-yellow-300">Brigadas</a></li>
+                    <li><a href="emergencias.html" class="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-full font-bold">🚨EMERGENCIAS</a></li>
+                </ul>
+            </nav>
+
+           <button id="darkModeToggle" class="ml-4 px-3 py-2 bg-white text-green-700 rounded shadow">
+        🌙
+      </button>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-8">
+        <!-- Filtros de Búsqueda -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-6 text-green-700 dark:text-green-400">Filtros de Búsqueda</h2>
+            
+            <div class="grid md:grid-cols-4 gap-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Nombre</label>
+                    <input type="text" id="filterNombre" placeholder="Buscar por nombre..."
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-2">Brigada</label>
+                    <select id="filterBrigada"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600">
+                        <option value="">Todas las brigadas</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-2">Estado</label>
+                    <select id="filterEstado"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600">
+                        <option value="">Todos los estados</option>
+                        <option value="disponible">Disponible</option>
+                        <option value="en_servicio">En Servicio</option>
+                        <option value="no_disponible">No Disponible</option>
+                        <option value="fuera_de_servicio">Fuera de Servicio</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-2">Facultad</label>
+                    <input type="text" id="filterFacultad" placeholder="Ej: Medicina"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600">
+                </div>
+            </div>
+
+            <div class="flex gap-4 mt-4">
+                <button id="btnBuscar" 
+                    class="px-6 py-2 bg-green-700 hover:bg-green-800 text-white font-semibold rounded-lg transition">
+                    Buscar
+                </button>
+                <button id="btnLimpiar"
+                    class="px-6 py-2 bg-gray-500 hover:bg-gray-600 text-white font-semibold rounded-lg transition">
+                    Limpiar
+                </button>
+                <button id="btnVerMapa"
+                    class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition">
+                    Ver en Mapa
+                </button>
+            </div>
+        </div>
+
+        <!-- Mapa (oculto por defecto) -->
+        <div id="mapaContainer" class="hidden bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-green-700 dark:text-green-400">Ubicación de Brigadistas</h2>
+                <button id="btnCerrarMapa"
+                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition">
+                    Cerrar Mapa
+                </button>
+            </div>
+            <div id="map" class="shadow-xl"></div>
+            <div class="mt-4 flex gap-4 text-sm">
+                <div class="flex items-center gap-2">
+                    <span class="w-4 h-4 bg-green-500 rounded-full"></span>
+                    <span>Disponible</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-4 h-4 bg-yellow-500 rounded-full"></span>
+                    <span>En Servicio</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-4 h-4 bg-red-500 rounded-full"></span>
+                    <span>No Disponible</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="w-4 h-4 bg-gray-500 rounded-full"></span>
+                    <span>Fuera de Servicio</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resultados -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <h2 class="text-2xl font-bold mb-6 text-green-700 dark:text-green-400">
+                Resultados <span id="totalResultados" class="text-gray-600 dark:text-gray-400 text-lg">(0)</span>
+            </h2>
+
+            <div id="loading" class="hidden text-center py-8">
+                <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-700"></div>
+                <p class="mt-4">Cargando brigadistas...</p>
+            </div>
+
+            <div id="noResults" class="hidden text-center py-8 text-gray-600 dark:text-gray-400">
+                <p class="text-xl">No se encontraron brigadistas con esos filtros</p>
+            </div>
+
+            <div id="resultadosContainer" class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Los resultados se cargarán aquí dinámicamente -->
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-green-700 dark:bg-green-900 text-white py-8 mt-12">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <p>&copy; 2025 Protección Civil - Universidad de Colima</p>
+        </div>
+    </footer>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+        let map;
+        let markers = [];
+
+        // Dark Mode
+        const btn = document.getElementById('darkModeToggle');
+        const html = document.documentElement;
+        if (localStorage.getItem('darkMode') === 'true') {
+            html.classList.add('dark');
+            btn.textContent = "🌞";
+        }
+        btn.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            btn.textContent = html.classList.contains('dark') ? "🌞" : "🌙";
+            localStorage.setItem('darkMode', html.classList.contains('dark'));
+        });
+
+        // Inicializar mapa
+        function initMap() {
+            map = L.map('map').setView([19.2452, -103.7241], 15);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+        }
+
+        // Cargar brigadas para el filtro
+        async function cargarBrigadas() {
+            try {
+                const response = await fetch(`${API_URL}/brigadas`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    const select = document.getElementById('filterBrigada');
+                    data.data.forEach(brigada => {
+                        const option = document.createElement('option');
+                        option.value = brigada.id;
+                        option.textContent = brigada.nombre;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error cargando brigadas:', error);
+            }
+        }
+
+        // Buscar brigadistas
+        async function buscarBrigadistas() {
+            const nombre = document.getElementById('filterNombre').value;
+            const brigada_id = document.getElementById('filterBrigada').value;
+            const estado = document.getElementById('filterEstado').value;
+            const facultad = document.getElementById('filterFacultad').value;
+
+            const params = new URLSearchParams();
+            if (nombre) params.append('nombre', nombre);
+            if (brigada_id) params.append('brigada_id', brigada_id);
+            if (estado) params.append('estado', estado);
+            if (facultad) params.append('facultad', facultad);
+
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('noResults').classList.add('hidden');
+            document.getElementById('resultadosContainer').innerHTML = '';
+
+            try {
+                const response = await fetch(`${API_URL}/brigadistas/buscar?${params}`);
+                const data = await response.json();
+
+                document.getElementById('loading').classList.add('hidden');
+
+                if (data.success && data.data.length > 0) {
+                    document.getElementById('totalResultados').textContent = `(${data.data.length})`;
+                    mostrarResultados(data.data);
+                } else {
+                    document.getElementById('noResults').classList.remove('hidden');
+                    document.getElementById('totalResultados').textContent = '(0)';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loading').classList.add('hidden');
+                alert('Error al buscar brigadistas');
+            }
+        }
+
+        // Mostrar resultados
+        function mostrarResultados(brigadistas) {
+            const container = document.getElementById('resultadosContainer');
+            container.innerHTML = '';
+
+            brigadistas.forEach(b => {
+                const estadoColors = {
+                    'disponible': 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
+                    'en_servicio': 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300',
+                    'no_disponible': 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300',
+                    'fuera_de_servicio': 'bg-gray-100 text-gray-700 dark:bg-gray-900 dark:text-gray-300'
+                };
+
+                const estadoTexto = {
+                    'disponible': 'Disponible',
+                    'en_servicio': 'En Servicio',
+                    'no_disponible': 'No Disponible',
+                    'fuera_de_servicio': 'Fuera de Servicio'
+                };
+
+                const card = document.createElement('div');
+                card.className = 'bg-gray-50 dark:bg-gray-700 rounded-lg p-5 shadow hover:shadow-xl transition';
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-3">
+                        <h3 class="font-bold text-lg">${b.nombre_completo}</h3>
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold ${estadoColors[b.estado_disponibilidad]}">
+                            ${estadoTexto[b.estado_disponibilidad]}
+                        </span>
+                    </div>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                        <strong>Brigada:</strong> ${b.brigada_nombre}
+                    </p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                        <strong>Facultad:</strong> ${b.facultad || 'No especificada'}
+                    </p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                        <strong>Ubicación:</strong> ${b.ubicacion_actual || 'Sin ubicación'}
+                    </p>
+                    ${b.cursos_imparte ? `
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                            <strong>Cursos que imparte:</strong> ${b.cursos_imparte}
+                        </p>
+                    ` : ''}
+                    <div class="flex gap-2 mt-4">
+                        <a href="mailto:${b.email}" class="text-sm text-green-700 hover:underline dark:text-green-400">
+                            ${b.email}
+                        </a>
+                    </div>
+                    ${b.telefono ? `
+                        <a href="tel:${b.telefono}" class="text-sm text-green-700 hover:underline dark:text-green-400 mt-1 block">
+                            ${b.telefono}
+                        </a>
+                    ` : ''}
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Mostrar brigadistas en el mapa
+        async function mostrarEnMapa() {
+            if (!map) initMap();
+
+            document.getElementById('mapaContainer').classList.remove('hidden');
+            setTimeout(() => map.invalidateSize(), 100);
+
+            // Limpiar marcadores anteriores
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+
+            try {
+                const response = await fetch(`${API_URL}/brigadistas/mapa`);
+                const data = await response.json();
+
+                if (data.success && data.data.length > 0) {
+                    data.data.forEach(b => {
+                        const colorMap = {
+                            'disponible': 'green',
+                            'en_servicio': 'orange',
+                            'no_disponible': 'red',
+                            'fuera_de_servicio': 'gray'
+                        };
+
+                        const icon = L.divIcon({
+                            className: 'custom-marker',
+                            html: `<div style="background-color: ${colorMap[b.estado_disponibilidad]}; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);"></div>`,
+                            iconSize: [24, 24]
+                        });
+
+                        const marker = L.marker([b.latitud, b.longitud], { icon })
+                            .addTo(map)
+                            .bindPopup(`
+                                <strong>${b.nombre_completo}</strong><br>
+                                ${b.brigada_nombre}<br>
+                                <em>${b.ubicacion_actual}</em><br>
+                                Estado: ${b.estado_disponibilidad}<br>
+                                <a href="tel:${b.telefono}">${b.telefono}</a>
+                            `);
+
+                        markers.push(marker);
+                    });
+
+                    // Ajustar vista del mapa
+                    const group = L.featureGroup(markers);
+                    map.fitBounds(group.getBounds().pad(0.1));
+                }
+            } catch (error) {
+                console.error('Error cargando mapa:', error);
+            }
+        }
+
+        // Event listeners
+        document.getElementById('btnBuscar').addEventListener('click', buscarBrigadistas);
+        document.getElementById('btnLimpiar').addEventListener('click', () => {
+            document.getElementById('filterNombre').value = '';
+            document.getElementById('filterBrigada').value = '';
+            document.getElementById('filterEstado').value = '';
+            document.getElementById('filterFacultad').value = '';
+            buscarBrigadistas();
+        });
+        document.getElementById('btnVerMapa').addEventListener('click', mostrarEnMapa);
+        document.getElementById('btnCerrarMapa').addEventListener('click', () => {
+            document.getElementById('mapaContainer').classList.add('hidden');
+        });
+
+        // Cargar datos iniciales
+        cargarBrigadas();
+        buscarBrigadistas();
+    </script>
+</body>
+</html>

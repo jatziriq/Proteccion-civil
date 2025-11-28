@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Protección Civil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { darkMode: 'class' }</script>
+    <style>
+        body { transition: background-color 0.3s ease, color 0.3s ease; }
+        .role-card { transition: all 0.3s ease; }
+        .role-card:hover { transform: translateY(-5px); }
+        .role-card.selected { 
+            border-color: #15803d; 
+            background-color: #f0fdf4; 
+        }
+        .dark .role-card.selected { 
+            border-color: #22c55e; 
+            background-color: #14532d; 
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200">
+
+    <header class="bg-green-700 text-white shadow-md dark:bg-green-900 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+            <div class="flex items-center space-x-4">
+                <img src="images/logo.jpg" alt="Logo" class="h-16 w-16 rounded-full border-2 border-white">
+                <h1 class="text-xl font-bold">Protección Civil - UdeC</h1>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <a href="index.html" class="px-4 py-2 bg-yellow-400 hover:bg-yellow-500 text-green-900 font-semibold rounded-full shadow transition">
+                    Volver
+                </a>
+                <button id="darkModeToggle" class="px-3 py-2 bg-white text-green-700 rounded shadow hover:bg-gray-200 dark:bg-gray-800 dark:text-yellow-300 dark:hover:bg-gray-700 transition">
+                    🌙
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex flex-col justify-center items-center min-h-[80vh] px-4 py-8">
+        <!-- Selector de Rol -->
+        <div id="roleSelector" class="w-full max-w-5xl mb-8">
+            <h2 class="text-3xl font-bold text-center mb-6 text-green-700 dark:text-yellow-400">Selecciona tu Rol</h2>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div class="role-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 cursor-pointer border-4 border-transparent text-center" data-role="admin">
+                    <div class="text-5xl mb-3">👨‍💼</div>
+                    <h3 class="font-bold text-lg mb-1">Administrador</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Gestión total</p>
+                </div>
+                
+                <div class="role-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 cursor-pointer border-4 border-transparent text-center" data-role="tecnico">
+                    <div class="text-5xl mb-3">🔧</div>
+                    <h3 class="font-bold text-lg mb-1">Técnico</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Soporte técnico</p>
+                </div>
+                
+                <div class="role-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 cursor-pointer border-4 border-transparent text-center" data-role="brigadista">
+                    <div class="text-5xl mb-3">🚑</div>
+                    <h3 class="font-bold text-lg mb-1">Brigadista</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Miembro activo</p>
+                </div>
+                
+                <div class="role-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 cursor-pointer border-4 border-transparent text-center" data-role="capacitador">
+                    <div class="text-5xl mb-3">📚</div>
+                    <h3 class="font-bold text-lg mb-1">Capacitador</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Instructor</p>
+                </div>
+                
+                <div class="role-card bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 cursor-pointer border-4 border-transparent text-center" data-role="usuario">
+                    <div class="text-5xl mb-3">👤</div>
+                    <h3 class="font-bold text-lg mb-1">Usuario</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Acceso básico</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formulario de Login -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 w-full max-w-md">
+            <h2 class="text-3xl font-bold text-center mb-6 text-green-700 dark:text-yellow-400">Iniciar Sesión</h2>
+            
+            <div id="alertBox" class="hidden mb-4 p-4 rounded-lg"></div>
+            
+            <form id="loginForm" class="space-y-5">
+                <input type="hidden" id="selectedRole" name="rol" value="">
+                
+                <div id="roleDisplay" class="hidden p-3 bg-green-100 dark:bg-green-900 rounded-lg text-center">
+                    <span class="text-sm font-semibold">Rol seleccionado: </span>
+                    <span id="roleText" class="text-lg font-bold text-green-700 dark:text-green-300"></span>
+                </div>
+                
+                <div>
+                    <label for="email" class="block text-sm font-medium mb-1">Correo institucional</label>
+                    <input type="email" id="email" name="email" placeholder="usuario@ucol.mx" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-yellow-400 transition">
+                </div>
+
+                <div>
+                    <label for="password" class="block text-sm font-medium mb-1">Contraseña</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-yellow-400 transition">
+                </div>
+
+                <div class="flex justify-between items-center text-sm">
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" class="rounded text-green-600 dark:bg-gray-700">
+                        <span>Recordarme</span>
+                    </label>
+                    <a href="#" class="text-green-700 hover:underline dark:text-yellow-400">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <button type="submit" id="loginBtn"
+                    class="w-full bg-green-700 hover:bg-green-800 text-white font-semibold py-2 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed">
+                    Ingresar
+                </button>
+            </form>
+
+            <p class="text-center text-sm mt-6">
+                ¿No tienes cuenta?
+                <a href="#" id="showRegister" class="text-green-700 font-semibold hover:underline dark:text-yellow-400">Regístrate aquí</a>
+            </p>
+        </div>
+
+        <!-- Formulario de Registro -->
+        <div id="registerForm" class="hidden bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 w-full max-w-md mt-8">
+            <h2 class="text-3xl font-bold text-center mb-6 text-green-700 dark:text-yellow-400">Registrarse</h2>
+            
+            <div id="registerAlertBox" class="hidden mb-4 p-4 rounded-lg"></div>
+            
+            <form id="registerFormElement" class="space-y-5">
+                <div>
+                    <label for="regName" class="block text-sm font-medium mb-1">Nombre completo</label>
+                    <input type="text" id="regName" placeholder="Nombre y apellidos" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-yellow-400 transition">
+                </div>
+
+                <div>
+                    <label for="regEmail" class="block text-sm font-medium mb-1">Correo institucional</label>
+                    <input type="email" id="regEmail" placeholder="usuario@ucol.mx" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-yellow-400 transition">
+                </div>
+
+                <div>
+                    <label for="regPassword" class="block text-sm font-medium mb-1">Contraseña</label>
+                    <input type="password" id="regPassword" placeholder="Mínimo 6 caracteres" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-yellow-400 transition">
+                </div>
+
+                <div>
+                    <label for="regRole" class="block text-sm font-medium mb-1">Tipo de cuenta</label>
+                    <select id="regRole" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-yellow-400 transition">
+                        <option value="">Selecciona un rol</option>
+                        <option value="usuario">Usuario (Estudiante/Personal)</option>
+                        <option value="brigadista">Brigadista</option>
+                        <option value="capacitador">Capacitador</option>
+                        <option value="admin">Administrador</option>
+                        <option value="tecnico">Técnico</option>
+                    </select>
+                </div>
+
+                <button type="submit" id="registerBtn"
+                    class="w-full bg-yellow-400 hover:bg-yellow-500 text-green-900 font-semibold py-2 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed">
+                    Crear cuenta
+                </button>
+
+                <p class="text-center text-sm mt-4">
+                    ¿Ya tienes una cuenta?
+                    <a href="#" id="showLogin" class="text-green-700 font-semibold hover:underline dark:text-yellow-400">Inicia sesión</a>
+                </p>
+            </form>
+        </div>
+    </main>
+
+    <footer class="bg-green-700 text-white text-center py-4 mt-10 dark:bg-green-900">
+        <p>© 2025 Universidad de Colima - Protección Civil | Todos los derechos reservados</p>
+    </footer>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+        
+        // Dark Mode Toggle
+        const btn = document.getElementById('darkModeToggle');
+        const html = document.documentElement;
+
+        if (localStorage.getItem('darkMode') === 'true') {
+            html.classList.add('dark');
+            btn.textContent = "🌞";
+        }
+
+        btn.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            btn.textContent = html.classList.contains('dark') ? "🌞" : "🌙";
+            localStorage.setItem('darkMode', html.classList.contains('dark'));
+        });
+
+        // Manejo de selección de rol
+        const roleCards = document.querySelectorAll('.role-card');
+        const selectedRoleInput = document.getElementById('selectedRole');
+        const roleDisplay = document.getElementById('roleDisplay');
+        const roleText = document.getElementById('roleText');
+        const loginBtn = document.getElementById('loginBtn');
+
+        roleCards.forEach(card => {
+            card.addEventListener('click', () => {
+                roleCards.forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                
+                const role = card.dataset.role;
+                selectedRoleInput.value = role;
+                roleText.textContent = card.querySelector('h3').textContent;
+                roleDisplay.classList.remove('hidden');
+                loginBtn.disabled = false;
+            });
+        });
+
+        // Cambio entre Login y Registro
+        const showRegisterBtn = document.getElementById('showRegister');
+        const showLoginBtn = document.getElementById('showLogin');
+        const registerFormDiv = document.getElementById('registerForm');
+        const loginFormDiv = document.querySelector('main > div:nth-child(2)');
+        const roleSelector = document.getElementById('roleSelector');
+
+        showRegisterBtn.addEventListener('click', e => {
+            e.preventDefault();
+            loginFormDiv.classList.add('hidden');
+            roleSelector.classList.add('hidden');
+            registerFormDiv.classList.remove('hidden');
+        });
+
+        showLoginBtn.addEventListener('click', e => {
+            e.preventDefault();
+            registerFormDiv.classList.add('hidden');
+            loginFormDiv.classList.remove('hidden');
+            roleSelector.classList.remove('hidden');
+        });
+
+        // Manejo de Login
+        const loginForm = document.getElementById('loginForm');
+        const alertBox = document.getElementById('alertBox');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const rol = selectedRoleInput.value;
+            
+            if (!rol) {
+                showAlert('Por favor selecciona un rol', 'error');
+                return;
+            }
+            
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Iniciando sesión...';
+            
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password, rol })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    showAlert('¡Login exitoso! Redirigiendo...', 'success');
+                    
+                    setTimeout(() => {
+                        // Redirigir según el rol
+                        const dashboards = {
+                            'admin': 'dash-admi.html',
+                            'tecnico': 'dash-tec.html',
+                            'brigadista': 'dash-brigadista.html',
+                            'capacitador': 'dash-capaci.html',
+                            'usuario': 'index.html'
+                        };
+                        window.location.href = dashboards[data.user.rol] || 'index.html';
+                    }, 1500);
+                } else {
+                    showAlert(data.message || 'Error al iniciar sesión', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Error de conexión con el servidor', 'error');
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Ingresar';
+            }
+        });
+
+        // Manejo de Registro
+        const registerFormElement = document.getElementById('registerFormElement');
+        const registerAlertBox = document.getElementById('registerAlertBox');
+        const registerBtn = document.getElementById('registerBtn');
+
+        registerFormElement.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const nombre = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const password = document.getElementById('regPassword').value;
+            const rol = document.getElementById('regRole').value;
+            
+            if (password.length < 6) {
+                showAlert('La contraseña debe tener al menos 6 caracteres', 'error', 'register');
+                return;
+            }
+            
+            registerBtn.disabled = true;
+            registerBtn.textContent = 'Registrando...';
+            
+            try {
+                const response = await fetch(`${API_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nombre, email, password, rol })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    showAlert('¡Registro exitoso! Ya puedes iniciar sesión', 'success', 'register');
+                    setTimeout(() => {
+                        showLoginBtn.click();
+                    }, 2000);
+                } else {
+                    showAlert(data.message || 'Error al registrar', 'error', 'register');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showAlert('Error de conexión con el servidor', 'error', 'register');
+            } finally {
+                registerBtn.disabled = false;
+                registerBtn.textContent = 'Crear cuenta';
+            }
+        });
+
+        function showAlert(message, type, form = 'login') {
+            const box = form === 'login' ? alertBox : registerAlertBox;
+            box.textContent = message;
+            box.className = `mb-4 p-4 rounded-lg ${
+                type === 'success' 
+                    ? 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300' 
+                    : 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300'
+            }`;
+            box.classList.remove('hidden');
+            
+            setTimeout(() => {
+                box.classList.add('hidden');
+            }, 5000);
+        }
+        
+        // Deshabilitar el botón de login inicialmente
+        loginBtn.disabled = true;
+    </script>
+</body>
+</html>

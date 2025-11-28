@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Técnico - Protección Civil</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/auth.js"></script>
+</head>
+<body class="bg-gray-50">
+
+    <header class="bg-blue-700 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
+            <div class="flex items-center space-x-4">
+                <img src="images/logo.jpg" alt="Logo" class="h-16 w-16 rounded-full border-2 border-white">
+                <h1 class="text-2xl font-bold">Panel Técnico</h1>
+            </div>
+            <nav>
+                <ul class="flex space-x-6">
+                    <li><a href="index.html" class="hover:text-yellow-300">Inicio</a></li>
+                    <li><a href="busqueda.html" class="hover:text-yellow-300">Brigadistas</a></li>
+                    <li><a href="emergencias.html" class="bg-red-600 px-4 py-2 rounded-full">🚨EMERGENCIAS</a></li>
+                </ul>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <span id="userName" class="font-semibold"></span>
+                <button onclick="Auth.logout()" class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-full">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-8">
+        <!-- Estadísticas del Sistema -->
+        <div class="grid md:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm">Emergencias Hoy</p>
+                        <h3 id="emergenciasHoy" class="text-3xl font-bold text-red-600">0</h3>
+                    </div>
+                    <div class="text-5xl">🚨</div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm">Brigadistas Disponibles</p>
+                        <h3 id="brigadistasDisponibles" class="text-3xl font-bold text-green-600">0</h3>
+                    </div>
+                    <div class="text-5xl">✅</div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm">Equipo Operativo</p>
+                        <h3 class="text-3xl font-bold text-blue-600">98%</h3>
+                    </div>
+                    <div class="text-5xl">⚙️</div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-600 text-sm">Tiempo Respuesta</p>
+                        <h3 class="text-3xl font-bold text-purple-600">3.5m</h3>
+                    </div>
+                    <div class="text-5xl">⏱️</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emergencias Activas -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-6 text-blue-700">🚨 Emergencias Activas</h2>
+            <div id="emergenciasActivas" class="space-y-4">
+                <p class="text-gray-600 text-center py-4">No hay emergencias activas</p>
+            </div>
+        </div>
+
+        <!-- Gestión de Equipamiento -->
+        <div class="grid md:grid-cols-2 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold mb-6 text-blue-700">🔧 Estado del Equipamiento</h2>
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                        <div>
+                            <p class="font-semibold">Extintores</p>
+                            <p class="text-sm text-gray-600">Última revisión: Hace 2 días</p>
+                        </div>
+                        <span class="px-3 py-1 bg-green-200 text-green-800 rounded-full text-sm">Operativo</span>
+                    </div>
+
+                    <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                        <div>
+                            <p class="font-semibold">Ambulancia</p>
+                            <p class="text-sm text-gray-600">Última revisión: Hace 1 semana</p>
+                        </div>
+                        <span class="px-3 py-1 bg-green-200 text-green-800 rounded-full text-sm">Operativo</span>
+                    </div>
+
+                    <div class="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
+                        <div>
+                            <p class="font-semibold">Desfibrilador</p>
+                            <p class="text-sm text-gray-600">Última revisión: Hace 3 semanas</p>
+                        </div>
+                        <span class="px-3 py-1 bg-yellow-200 text-yellow-800 rounded-full text-sm">Revisar</span>
+                    </div>
+
+                    <div class="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+                        <div>
+                            <p class="font-semibold">Botiquines</p>
+                            <p class="text-sm text-gray-600">Última revisión: Hace 4 días</p>
+                        </div>
+                        <span class="px-3 py-1 bg-green-200 text-green-800 rounded-full text-sm">Operativo</span>
+                    </div>
+                </div>
+                <button class="mt-4 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    + Registrar Mantenimiento
+                </button>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold mb-6 text-blue-700">📋 Tareas Pendientes</h2>
+                <div class="space-y-3">
+                    <div class="p-3 border-l-4 border-red-500 bg-gray-50">
+                        <p class="font-semibold text-red-600">URGENTE</p>
+                        <p>Revisión mensual de extintores en Edificio C</p>
+                        <p class="text-sm text-gray-600">Vence: Mañana</p>
+                    </div>
+
+                    <div class="p-3 border-l-4 border-yellow-500 bg-gray-50">
+                        <p class="font-semibold text-yellow-600">PENDIENTE</p>
+                        <p>Actualizar inventario de botiquines</p>
+                        <p class="text-sm text-gray-600">Vence: En 3 días</p>
+                    </div>
+
+                    <div class="p-3 border-l-4 border-blue-500 bg-gray-50">
+                        <p class="font-semibold text-blue-600">PROGRAMADO</p>
+                        <p>Simulacro de evacuación mensual</p>
+                        <p class="text-sm text-gray-600">Fecha: 15/12/2024</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mapa de Brigadistas -->
+        <div class="bg-white rounded-xl shadow-lg p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold text-blue-700">🗺️ Ubicación de Brigadistas</h2>
+                <a href="buscar-brigadistas.html" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                    Ver Mapa Completo
+                </a>
+            </div>
+            <div class="bg-gray-100 rounded-lg h-64 flex items-center justify-center">
+                <p class="text-gray-600">Vista previa del mapa - Clic en "Ver Mapa Completo"</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-blue-700 text-white py-8 mt-12">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <p>&copy; 2025 Protección Civil - Universidad de Colima</p>
+        </div>
+    </footer>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+
+        // Proteger página - solo técnicos
+        if (!Auth.protectPage(['tecnico'])) {
+            // Ya redirige automáticamente
+        }
+
+        const user = Auth.getCurrentUser();
+        document.getElementById('userName').textContent = user.nombre;
+
+        // Cargar estadísticas
+        async function cargarEstadisticas() {
+            try {
+                const response = await fetch(`${API_URL}/estadisticas`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('emergenciasHoy').textContent = data.data.emergencias_activas || 0;
+                    document.getElementById('brigadistasDisponibles').textContent = data.data.brigadistas_activos || 0;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        // Cargar estadísticas
+        async function cargarEstadisticas() {
+            try {
+                const response = await Auth.authenticatedFetch(`${API_URL}/estadisticas/tecnico`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    document.getElementById('emergenciasHoy').textContent = data.data.emergenciasHoy || 0;
+                    document.getElementById('brigadistasDisponibles').textContent = data.data.brigadistasDisponibles || 0;
+                    
+                    // Calcular tiempo de respuesta promedio (simulado por ahora)
+                    const tiempoRespuesta = data.data.emergenciasActivas > 0 ? '3.5m' : 'N/A';
+                    document.querySelector('.text-purple-600').textContent = tiempoRespuesta;
+                }
+
+                // Cargar emergencias activas
+                cargarEmergenciasActivas();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al cargar estadísticas');
+            }
+        }
+
+        // Cargar emergencias activas
+        async function cargarEmergenciasActivas() {
+            try {
+                const response = await Auth.authenticatedFetch(`${API_URL}/emergencias/activas`);
+                const data = await response.json();
+                
+                if (data.success && data.data.length > 0) {
+                    const container = document.getElementById('emergenciasActivas');
+                    container.innerHTML = data.data.map(e => {
+                        const coloresUrgencia = {
+                            'critica': 'bg-red-100 border-red-500 text-red-700',
+                            'alta': 'bg-orange-100 border-orange-500 text-orange-700',
+                            'media': 'bg-yellow-100 border-yellow-500 text-yellow-700',
+                            'baja': 'bg-blue-100 border-blue-500 text-blue-700'
+                        };
+                        
+                        return `
+                            <div class="p-4 ${coloresUrgencia[e.nivel_urgencia]} border-l-4 rounded-lg">
+                                <div class="flex justify-between items-start mb-2">
+                                    <div>
+                                        <p class="font-bold">${e.folio}</p>
+                                        <p class="text-sm">${e.tipo_emergencia.toUpperCase()}</p>
+                                    </div>
+                                    <span class="px-3 py-1 bg-white rounded-full text-xs font-semibold">
+                                        ${e.estatus}
+                                    </span>
+                                </div>
+                                <p class="text-sm mb-2">${e.descripcion}</p>
+                                <div class="text-xs">
+                                    <p>📍 ${e.ubicacion_detallada}</p>
+                                    <p>⏰ ${new Date(e.fecha_reporte).toLocaleString()}</p>
+                                    ${e.brigada_nombre ? `<p>🚑 ${e.brigada_nombre}</p>` : ''}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    document.getElementById('emergenciasActivas').innerHTML = 
+                        '<p class="text-gray-600 text-center py-4">✅ No hay emergencias activas</p>';
+                }
+            } catch (error) {
+                console.error('Error cargando emergencias:', error);
+            }
+        }
+
+        cargarEstadisticas();
+    </script>
+</body>
+</html>

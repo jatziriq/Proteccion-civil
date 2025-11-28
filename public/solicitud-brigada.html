@@ -14,10 +14,10 @@
   <!-- Navbar -->
   <header class="bg-green-700 text-white shadow-md dark:bg-green-900">
     <div class="max-w-7xl mx-auto flex justify-between items-center p-4">
-       <div class="flex items-center space-x-4">
+      <div class="flex items-center space-x-4">
                 <img src="images/logo.jpg" 
                 alt="Logo" class="h-16 w-16 rounded-full border-2 border-white">
-                <h1 class="text-xl font-bold">Protección Civil - UdeC</h1>
+                <h1 class="text-2xl font-bold">Protección Civil - UdeC</h1>
         </div>
       <a href="brigadas.html" class="hover:text-yellow-300 transition">← Volver a Brigadas</a>
     </div>
@@ -74,7 +74,20 @@
           <input type="text" id="carrera" required placeholder="Ej. Ingeniería Civil"
             class="w-full border-2 rounded-lg p-3 dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:border-green-500 focus:outline-none">
         </div>
-
+        <!-- Facultad -->
+        <div class="form-group">
+    <label for="facultad">Facultad</label>
+    <select id="facultad" name="facultad" required>
+        <option value="">Seleccione una facultad</option>
+        <option value="Ingeniería">Ingeniería</option>
+        <option value="Química">Química</option>
+        <option value="Derecho">Derecho</option>
+        <option value="Medicina">Medicina</option>
+        <option value="Economía">Economía</option>
+        <option value="Filosofía">Filosofía</option>
+        <!-- Agrega las que necesites -->
+    </select>
+</div>
         <!-- Experiencia -->
         <div>
           <label class="block font-semibold mb-2 text-gray-700 dark:text-gray-200">Experiencia Previa</label>
